@@ -14,7 +14,7 @@ spec:
         app: postgres
     spec:
       containers:
-        - name: postgres
+        - name: postgres-wrong
           image: postgres:16
           ports:
             - containerPort: 5432
