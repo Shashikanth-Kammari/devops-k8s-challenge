@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  IMAGE_NAME: YOUR_DOCKERHUB_USERNAME/devops-demo
+  IMAGE_NAME: shashikanthchary/devops-demo
 
 jobs:
 
