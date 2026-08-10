@@ -24,7 +24,7 @@ def home():
     return jsonify({
         "application": "devops-challenge",
         "status": "running",
-        "version": "1.0.0"
+        "version": "2.0.0"
     })
 
 
