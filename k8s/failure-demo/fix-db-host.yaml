@@ -1,0 +1,16 @@
+# FIX: restores the correct PGHOST value matching the real Service name ("postgres").
+# After applying, you MUST also roll the backend pods, because Kubernetes does
+# NOT hot-reload env vars sourced from a ConfigMap into already-running containers:
+#
+#   kubectl apply -f k8s/failure-demo/fix-db-host.yaml
+#   kubectl -n devops-challenge rollout restart deployment/backend
+#   kubectl -n devops-challenge rollout status deployment/backend
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: devops-challenge
+data:
+  PGHOST: "postgres"
+  PGPORT: "5432"
+  PORT: "3000"

@@ -1,0 +1,18 @@
+# FAILURE INJECTION: apply this to break the backend's DB connectivity.
+# Simulates a very common real-world incident: someone edits a ConfigMap
+# (e.g. during a "quick fix") and typos the service name / it drifts from
+# the actual Service name in the cluster.
+#
+# Apply with:
+#   kubectl apply -f k8s/failure-demo/break-db-host.yaml
+#
+# This patches backend-config so PGHOST points at a Service that doesn't exist.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: devops-challenge
+data:
+  PGHOST: "postgres-db"   # WRONG - actual Service is named "postgres"
+  PGPORT: "5432"
+  PORT: "3000"

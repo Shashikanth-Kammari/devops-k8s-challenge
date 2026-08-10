@@ -1,0 +1,14 @@
+{
+  "name": "devops-challenge-backend",
+  "version": "1.0.0",
+  "description": "Minimal backend for k8s DevOps challenge",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node -e \"console.log('no tests - smoke only')\""
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.12.0"
+  }
+}

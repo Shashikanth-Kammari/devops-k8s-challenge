@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: devops-challenge
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0   # never drop below full capacity during a rollout
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          # replaced by CI/CD with the freshly built, immutable tag (git SHA)
+          image: ghcr.io/YOUR_GH_USERNAME/devops-challenge-backend:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - secretRef:
+                name: postgres-secret   # supplies PGUSER / PGPASSWORD / PGDATABASE
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: devops-challenge
+spec:
+  type: NodePort
+  selector:
+    app: backend
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30080
