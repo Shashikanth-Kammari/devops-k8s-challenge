@@ -23,8 +23,8 @@ def get_db_connection():
 def home():
     return jsonify({
         "application": "devops-challenge",
-        "status": "running",
-        "version": "2.0.0"
+        "status": "running"
+        
     })
 
 
