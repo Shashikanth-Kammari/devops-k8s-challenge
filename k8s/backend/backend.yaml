@@ -26,7 +26,7 @@ spec:
       containers:
         - name: backend
 
-          image: shashikanthchary/devops-demo:latest
+          image: shashikanthchary/devops-demo
 
           ports:
             - containerPort: 8080
