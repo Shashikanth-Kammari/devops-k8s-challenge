@@ -33,7 +33,6 @@ jobs:
           cd app
           python -m pytest
 
-
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -60,24 +59,27 @@ jobs:
           docker push $IMAGE_NAME:${{ github.sha }}
           docker push $IMAGE_NAME:latest
 
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Deploy to Kubernetes
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAG: ${{ github.sha }}
         with:
           host: ${{ secrets.K8S_HOST }}
           username: ${{ secrets.K8S_USER }}
           key: ${{ secrets.K8S_SSH_KEY }}
+          envs: IMAGE_NAME,IMAGE_TAG
 
           script: |
+            echo "Deploying image: ${IMAGE_NAME}:${IMAGE_TAG}"
 
             kubectl -n devops-demo set image deployment/backend \
-              backend=$IMAGE_NAME:${{ github.sha }}
+              backend=${IMAGE_NAME}:${IMAGE_TAG}
 
             kubectl -n devops-demo rollout status \
               deployment/backend \
