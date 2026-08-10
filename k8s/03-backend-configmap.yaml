@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: backend-config
-  namespace: devops-challenge
-data:
-  PGHOST: "postgres"
-  PGPORT: "5432"
-  PORT: "3000"
